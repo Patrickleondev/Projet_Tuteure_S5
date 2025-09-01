@@ -73,14 +73,5 @@ python app.py
 4. Cliquer sur "Prédire le résultat"
 5. Consulter les prédictions et statistiques détaillées
 
-## Auteurs
-
-- Patrick Leon
-
-## Licence
-
-MIT License
-
-## Contribution
 
 Les contributions sont les bienvenues ! N'hésitez pas à ouvrir une issue ou à soumettre une pull request. 
