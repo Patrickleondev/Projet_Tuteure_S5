@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Insight Predictor</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-900 text-white min-h-screen">
+    <!-- Navigation -->
+    <nav class="bg-gray-900 text-white">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <a href="{{ url_for('index') }}" class="flex items-center">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Logo" class="h-8 w-8 mr-2">
+                    <span class="text-xl font-bold">FIP</span>
+                </a>
+                
+                <!-- Menu principal -->
+                <div class="hidden md:flex space-x-8">
+                    <a href="{{ url_for('index') }}" class="hover:text-blue-500 transition duration-200">
+                        <i class="fas fa-home mr-2"></i>Accueil
+                    </a>
+                    <a href="{{ url_for('predictions') }}" class="hover:text-blue-500 transition duration-200">
+                        <i class="fas fa-chart-line mr-2"></i>Prédictions
+                    </a>
+                    <a href="{{ url_for('upcoming_matches') }}" class="hover:text-blue-500 transition duration-200">
+                        <i class="fas fa-calendar mr-2"></i>Matchs à venir
+                    </a>
+                    <a href="{{ url_for('clubs') }}" class="hover:text-blue-500 transition duration-200">
+                        <i class="fas fa-shield-alt mr-2"></i>Clubs
+                    </a>
+                    <a href="{{ url_for('competitions') }}" class="hover:text-blue-500 transition duration-200">
+                        <i class="fas fa-trophy mr-2"></i>Compétitions
+                    </a>
+                    <a href="{{ url_for('chatbot') }}" class="hover:text-blue-500 transition duration-200">
+                        <i class="fas fa-robot mr-2"></i>Assistant
+                    </a>
+                    <a href="{{ url_for('support') }}" class="hover:text-blue-500 transition duration-200">
+                        <i class="fas fa-question-circle mr-2"></i>Support
+                    </a>
+                </div>
+                
+                <!-- Menu mobile -->
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white hover:text-blue-500">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+            </div>
+        </div>
+
+            <!-- Menu mobile déroulant -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <a href="{{ url_for('index') }}" class="block py-2 hover:text-blue-500">
+                    <i class="fas fa-home mr-2"></i>Accueil
+                </a>
+                <a href="{{ url_for('predictions') }}" class="block py-2 hover:text-blue-500">
+                    <i class="fas fa-chart-line mr-2"></i>Prédictions
+                </a>
+                <a href="{{ url_for('upcoming_matches') }}" class="block py-2 hover:text-blue-500">
+                    <i class="fas fa-calendar mr-2"></i>Matchs à venir
+                </a>
+                <a href="{{ url_for('clubs') }}" class="block py-2 hover:text-blue-500">
+                    <i class="fas fa-shield-alt mr-2"></i>Clubs
+                </a>
+                <a href="{{ url_for('competitions') }}" class="block py-2 hover:text-blue-500">
+                    <i class="fas fa-trophy mr-2"></i>Compétitions
+                </a>
+                <a href="{{ url_for('chatbot') }}" class="block py-2 hover:text-blue-500">
+                    <i class="fas fa-robot mr-2"></i>Assistant
+                </a>
+                <a href="{{ url_for('support') }}" class="block py-2 hover:text-blue-500">
+                    <i class="fas fa-question-circle mr-2"></i>Support
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Contenu principal -->
+    <main class="min-h-screen">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Contact -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact</h3>
+                    <ul class="space-y-2">
+                        <li>
+                            <a href="https://wa.me/22893035706" 
+                               target="_blank"
+                               class="flex items-center text-gray-300 hover:text-white">
+                                <i class="fab fa-whatsapp mr-2"></i>
+                                WhatsApp Support
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:support@fip.com" class="text-gray-300 hover:text-white">
+                                <i class="fas fa-envelope mr-2"></i>
+                                support@fip.com
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Navigation -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Navigation</h3>
+                    <ul class="space-y-2">
+                        <li><a href="{{ url_for('index') }}" class="text-gray-300 hover:text-white">
+                            <i class="fas fa-home mr-2"></i>Accueil
+                        </a></li>
+                        <li><a href="{{ url_for('predictions') }}" class="text-gray-300 hover:text-white">
+                            <i class="fas fa-chart-line mr-2"></i>Prédictions
+                        </a></li>
+                        <li><a href="{{ url_for('clubs') }}" class="text-gray-300 hover:text-white">
+                            <i class="fas fa-shield-alt mr-2"></i>Clubs
+                        </a></li>
+                        <li><a href="{{ url_for('chatbot') }}" class="text-gray-300 hover:text-white">
+                            <i class="fas fa-robot mr-2"></i>Assistant
+                        </a></li>
+                    </ul>
+                </div>
+                
+                <!-- Réseaux sociaux -->
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Suivez-nous</h3>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-twitter text-2xl"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-facebook text-2xl"></i></a>
+                        <a href="#" class="text-gray-300 hover:text-white"><i class="fab fa-instagram text-2xl"></i></a>
+                    </div>
+            </div>
+            </div>
+            
+            <div class="mt-8 text-center text-gray-400">
+                <p>&copy; 2025  Football Insight Predictor. Tous droits réservés.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Menu mobile
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+                // Ajouter une animation de transition
+                if (!mobileMenu.classList.contains('hidden')) {
+                    mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
+                } else {
+                    mobileMenu.style.maxHeight = '0';
+                }
+            });
+
+            // Fermer le menu mobile lors du clic sur un lien
+            const mobileLinks = mobileMenu.getElementsByTagName('a');
+            for (const link of mobileLinks) {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.style.maxHeight = '0';
+                });
+            }
+
+            // Fermer le menu mobile lors du redimensionnement de la fenêtre
+            window.addEventListener('resize', function() {
+                if (window.innerWidth >= 768) {
+                    mobileMenu.classList.add('hidden');
+                    mobileMenu.style.maxHeight = '0';
+                }
+            });
+        });
+    </script>
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html> 

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Insight Predictor - Prédictions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white rounded-lg shadow-lg p-6">
+            <h1 class="text-2xl font-bold mb-6">Analyse du Match</h1>
+            
+            <!-- Sélection des équipes -->
+            <div class="grid grid-cols-3 gap-4 mb-8">
+                <div class="text-center">
+                    <img id="team1Logo" class="w-32 h-32 mx-auto mb-4" src="" alt="Logo équipe 1">
+                    <select id="team1Select" class="w-full p-2 border rounded">
+                        <!-- Options remplies dynamiquement -->
+                    </select>
+                </div>
+                
+                <div class="flex items-center justify-center">
+                    <span class="text-2xl font-bold">VS</span>
+                </div>
+                
+                <div class="text-center">
+                    <img id="team2Logo" class="w-32 h-32 mx-auto mb-4" src="" alt="Logo équipe 2">
+                    <select id="team2Select" class="w-full p-2 border rounded">
+                        <!-- Options remplies dynamiquement -->
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Résultats de la prédiction -->
+            <div class="grid grid-cols-2 gap-8">
+                <!-- Graphique de probabilités -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-xl font-semibold mb-4">Probabilités</h2>
+                    <canvas id="probabilityChart"></canvas>
+                </div>
+                
+                <!-- Statistiques clés -->
+                <div class="bg-gray-50 p-4 rounded-lg">
+                    <h2 class="text-xl font-semibold mb-4">Statistiques Clés</h2>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center">
+                            <span id="team1Goals" class="text-lg"></span>
+                            <span class="font-medium">Buts attendus</span>
+                            <span id="team2Goals" class="text-lg"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span id="team1Possession" class="text-lg"></span>
+                            <span class="font-medium">Possession</span>
+                            <span id="team2Possession" class="text-lg"></span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span id="team1Form" class="text-lg"></span>
+                            <span class="font-medium">Forme récente</span>
+                            <span id="team2Form" class="text-lg"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Facteurs d'influence -->
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold mb-4">Facteurs d'Influence</h2>
+                <div class="grid grid-cols-3 gap-4" id="factorsGrid">
+                    <!-- Rempli dynamiquement -->
+                </div>
+            </div>
+            
+            <!-- Historique des confrontations -->
+            <div class="mt-8">
+                <h2 class="text-xl font-semibold mb-4">Historique des Confrontations</h2>
+                <table class="w-full">
+                    <thead>
+                        <tr class="bg-gray-200">
+                            <th class="p-2">Date</th>
+                            <th class="p-2">Score</th>
+                            <th class="p-2">Compétition</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyTable">
+                        <!-- Rempli dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <script src="/static/js/prediction.js"></script>
+</body>
+</html> 

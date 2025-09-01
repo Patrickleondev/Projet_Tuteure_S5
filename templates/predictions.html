@@ -1,0 +1,348 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 bg-gray-900 min-h-screen text-white">
+    <h1 class="text-4xl font-bold mb-8 text-center">Prédiction de matchs</h1>
+
+    <!-- Sélection des équipes -->
+    <div class="mb-12 bg-gray-800 rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-400">Sélectionner les équipes</h2>
+        
+        <!-- Sélection de la compétition -->
+        <div class="mb-6">
+            <label class="block text-gray-300 mb-2">Compétition</label>
+            <select id="competition-select" class="w-full bg-gray-700 text-white rounded-md p-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                <option value="">Sélectionner une compétition</option>
+                {% for competition in competitions.clubs %}
+                <option value="{{ competition.id }}">{{ competition.name }}</option>
+                {% endfor %}
+                {% for competition in competitions.nations %}
+                <option value="{{ competition.id }}">{{ competition.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <!-- Sélection des équipes -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-gray-300 mb-2">Équipe domicile</label>
+                <select id="home-team" class="w-full bg-gray-700 text-white rounded-md p-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                    <option value="">Sélectionner l'équipe domicile</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-300 mb-2">Équipe extérieur</label>
+                <select id="away-team" class="w-full bg-gray-700 text-white rounded-md p-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                    <option value="">Sélectionner l'équipe extérieur</option>
+                </select>
+            </div>
+        </div>
+
+        <button id="predict-btn" class="mt-6 w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200">
+            Prédire le résultat
+        </button>
+    </div>
+
+    <!-- Résultats de la prédiction -->
+    <div id="prediction-results" class="hidden">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
+            <!-- Probabilités -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Probabilités de résultat</h3>
+                <canvas id="probabilityChart"></canvas>
+            </div>
+
+            <!-- Statistiques des équipes -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Comparaison des équipes</h3>
+                <canvas id="teamComparisonChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Statistiques détaillées -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Cartons -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Cartons</h3>
+                <canvas id="cardsChart"></canvas>
+            </div>
+
+            <!-- Corners et hors-jeu -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Corners et hors-jeu</h3>
+                <canvas id="setPlayChart"></canvas>
+            </div>
+
+            <!-- Fautes -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-blue-400">Fautes</h3>
+                <canvas id="foulsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const competitionSelect = document.getElementById('competition-select');
+    const homeTeamSelect = document.getElementById('home-team');
+    const awayTeamSelect = document.getElementById('away-team');
+    const predictBtn = document.getElementById('predict-btn');
+    const predictionResults = document.getElementById('prediction-results');
+    
+    let charts = {
+        probability: null,
+        teamComparison: null,
+        cards: null,
+        setPlay: null,
+        fouls: null
+    };
+
+    // Charger les équipes lors du changement de compétition
+    competitionSelect.addEventListener('change', function() {
+        const competitionId = this.value;
+        if (!competitionId) return;
+
+        fetch(`/api/teams/${competitionId}`)
+            .then(response => response.json())
+            .then(teams => {
+                const options = ['<option value="">Sélectionner une équipe</option>'];
+                teams.forEach(team => {
+                    options.push(`<option value="${team.id}">${team.name}</option>`);
+                });
+                homeTeamSelect.innerHTML = options.join('');
+                awayTeamSelect.innerHTML = options.join('');
+            });
+    });
+
+    // Prédire le résultat
+    predictBtn.addEventListener('click', function() {
+        const homeTeam = homeTeamSelect.value;
+        const awayTeam = awayTeamSelect.value;
+        const competition = competitionSelect.value;
+
+        if (!homeTeam || !awayTeam) {
+            alert('Veuillez sélectionner les deux équipes');
+            return;
+        }
+
+        fetch('/api/predict', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                home_team: homeTeam,
+                away_team: awayTeam,
+                competition: competition
+            })
+        })
+        .then(response => response.json())
+        .then(data => {
+            predictionResults.classList.remove('hidden');
+            updateCharts(data);
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            alert('Une erreur est survenue lors de la prédiction');
+        });
+    });
+
+    function updateCharts(data) {
+        // Mettre à jour le graphique des probabilités
+        if (charts.probability) charts.probability.destroy();
+        charts.probability = new Chart(document.getElementById('probabilityChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Victoire domicile', 'Match nul', 'Victoire extérieur'],
+                datasets: [{
+                    data: [data.home_win, data.draw, data.away_win],
+                    backgroundColor: ['#3B82F6', '#10B981', '#EF4444']
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                }
+            }
+        });
+
+        // Mettre à jour les autres graphiques avec les statistiques
+        updateStatisticsCharts(data);
+    }
+
+    function updateStatisticsCharts(data) {
+        // Graphique des cartons
+        if (charts.cards) charts.cards.destroy();
+        charts.cards = new Chart(document.getElementById('cardsChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Cartons jaunes', 'Cartons rouges'],
+                datasets: [{
+                    label: 'Domicile',
+                    data: [
+                        data.cards?.yellow?.home || 0,
+                        data.cards?.red?.home || 0
+                    ],
+                    backgroundColor: '#3B82F6'
+                }, {
+                    label: 'Extérieur',
+                    data: [
+                        data.cards?.yellow?.away || 0,
+                        data.cards?.red?.away || 0
+                    ],
+                    backgroundColor: '#EF4444'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Graphique des corners et hors-jeu
+        if (charts.setPlay) charts.setPlay.destroy();
+        charts.setPlay = new Chart(document.getElementById('setPlayChart').getContext('2d'), {
+            type: 'radar',
+            data: {
+                labels: ['Corners', 'Hors-jeu'],
+                datasets: [{
+                    label: 'Domicile',
+                    data: [
+                        data.corners?.home || 0,
+                        data.offsides?.home || 0
+                    ],
+                    backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                    borderColor: '#3B82F6'
+                }, {
+                    label: 'Extérieur',
+                    data: [
+                        data.corners?.away || 0,
+                        data.offsides?.away || 0
+                    ],
+                    backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                    borderColor: '#EF4444'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    r: {
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        },
+                        ticks: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+
+        // Graphique des fautes
+        if (charts.fouls) charts.fouls.destroy();
+        charts.fouls = new Chart(document.getElementById('foulsChart').getContext('2d'), {
+            type: 'bar',
+            data: {
+                labels: ['Fautes'],
+                datasets: [{
+                    label: 'Domicile',
+                    data: [data.fouls?.home || 0],
+                    backgroundColor: '#3B82F6'
+                }, {
+                    label: 'Extérieur',
+                    data: [data.fouls?.away || 0],
+                    backgroundColor: '#EF4444'
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            color: 'rgba(255, 255, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#9CA3AF'
+                        },
+                        grid: {
+                            display: false
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        labels: {
+                            color: '#9CA3AF'
+                        }
+                    }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %} 

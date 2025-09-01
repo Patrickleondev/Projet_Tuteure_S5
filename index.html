@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Football Insight Predictor (FIP)</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script type="module" src="/src/js/upcoming-matches.js"></script>
+    <script type="module" src="/src/js/teams.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-center mb-8">Football Insight Predictor (FIP)</h1>
+        
+        <!-- Sélection du championnat et des équipes -->
+        <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Prédiction de match</h2>
+            
+            <!-- Sélection du championnat -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Championnat</label>
+                <select id="league" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <option value="">Sélectionnez un championnat</option>
+                    <optgroup label="Championnats de clubs">
+                        <option value="champions_league">Ligue des Champions</option>
+                        <option value="ligue1">Ligue 1</option>
+                        <option value="premier_league">Premier League</option>
+                        <option value="liga">La Liga</option>
+                    </optgroup>
+                    <optgroup label="Compétitions nationales">
+                        <option value="world_cup">Coupe du Monde</option>
+                        <option value="euro">Euro</option>
+                        <option value="copa_america">Copa America</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <!-- Sélection des équipes -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Équipe 1</label>
+                    <select id="team1" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" disabled>
+                        <option value="">Sélectionnez une équipe</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Équipe 2</label>
+                    <select id="team2" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" disabled>
+                        <option value="">Sélectionnez une équipe</option>
+                    </select>
+                </div>
+            </div>
+
+            <button id="predict" class="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 disabled:bg-gray-400" disabled>
+                Prédire le match
+            </button>
+        </div>
+
+        <!-- Résultats de la prédiction -->
+        <div id="prediction-results" class="bg-white rounded-lg shadow-md p-6 mb-8 hidden">
+            <h2 class="text-xl font-semibold mb-4">Résultats de la prédiction</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="text-center">
+                    <h3 class="font-medium" id="team1-name"></h3>
+                    <p class="text-3xl font-bold mt-2" id="score1"></p>
+                </div>
+                <div class="text-center">
+                    <h3 class="font-medium" id="team2-name"></h3>
+                    <p class="text-3xl font-bold mt-2" id="score2"></p>
+                </div>
+            </div>
+            <div class="mt-6">
+                <h3 class="font-medium mb-2">Statistiques détaillées</h3>
+                <div class="space-y-2" id="detailed-stats"></div>
+            </div>
+            <div class="mt-4 text-center">
+                <p class="text-sm text-gray-600">Précision de la prédiction: <span id="accuracy"></span>%</p>
+            </div>
+        </div>
+
+        <!-- Matchs à venir -->
+        <div class="bg-white rounded-lg shadow-md p-6">
+            <h2 class="text-xl font-semibold mb-4">Matchs à venir</h2>
+            <div id="upcoming-matches" class="space-y-4">
+                <div class="text-center">
+                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500 mx-auto"></div>
+                    <p class="text-gray-500 mt-2">Chargement des matchs...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

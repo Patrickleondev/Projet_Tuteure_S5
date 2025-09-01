@@ -1,0 +1,132 @@
+3,Bayer 04 Leverkusen,CL
+4,Borussia Dortmund,CL
+5,FC Bayern München,CL
+10,VfB Stuttgart,CL
+57,Arsenal FC,CL
+58,Aston Villa FC,CL
+64,Liverpool FC,CL
+65,Manchester City FC,CL
+78,Club Atlético de Madrid,CL
+81,FC Barcelona,CL
+86,Real Madrid CF,CL
+98,AC Milan,CL
+102,Atalanta BC,CL
+103,Bologna FC 1909,CL
+108,FC Internazionale Milano,CL
+109,Juventus FC,CL
+298,Girona FC,CL
+498,Sporting Clube de Portugal,CL
+512,Stade Brestois 29,CL
+521,Lille OSC,CL
+524,Paris Saint-Germain FC,CL
+548,AS Monaco FC,CL
+674,PSV,CL
+675,Feyenoord Rotterdam,CL
+721,RB Leipzig,CL
+732,Celtic FC,CL
+755,GNK Dinamo Zagreb,CL
+851,Club Brugge KV,CL
+907,AC Sparta Praha,CL
+1871,BSC Young Boys,CL
+1877,FC Red Bull Salzburg,CL
+1887,FK Shakhtar Donetsk,CL
+1903,Sport Lisboa e Benfica,CL
+2021,SK Sturm Graz,CL
+7283,FK Crvena Zvezda,CL
+7509,ŠK Slovan Bratislava,CL
+57,Arsenal FC,PL
+58,Aston Villa FC,PL
+61,Chelsea FC,PL
+62,Everton FC,PL
+63,Fulham FC,PL
+64,Liverpool FC,PL
+65,Manchester City FC,PL
+66,Manchester United FC,PL
+67,Newcastle United FC,PL
+71,Sunderland AFC,PL
+73,Tottenham Hotspur FC,PL
+76,Wolverhampton Wanderers FC,PL
+328,Burnley FC,PL
+341,Leeds United FC,PL
+351,Nottingham Forest FC,PL
+354,Crystal Palace FC,PL
+397,Brighton & Hove Albion FC,PL
+402,Brentford FC,PL
+563,West Ham United FC,PL
+1044,AFC Bournemouth,PL
+1,1. FC Köln,BL1
+2,TSG 1899 Hoffenheim,BL1
+3,Bayer 04 Leverkusen,BL1
+4,Borussia Dortmund,BL1
+5,FC Bayern München,BL1
+7,Hamburger SV,BL1
+10,VfB Stuttgart,BL1
+11,VfL Wolfsburg,BL1
+12,SV Werder Bremen,BL1
+15,1. FSV Mainz 05,BL1
+16,FC Augsburg,BL1
+17,SC Freiburg,BL1
+18,Borussia Mönchengladbach,BL1
+19,Eintracht Frankfurt,BL1
+20,FC St. Pauli 1910,BL1
+28,1. FC Union Berlin,BL1
+44,1. FC Heidenheim 1846,BL1
+721,RB Leipzig,BL1
+98,AC Milan,SA
+99,ACF Fiorentina,SA
+100,AS Roma,SA
+102,Atalanta BC,SA
+103,Bologna FC 1909,SA
+104,Cagliari Calcio,SA
+107,Genoa CFC,SA
+108,FC Internazionale Milano,SA
+109,Juventus FC,SA
+110,SS Lazio,SA
+112,Parma Calcio 1913,SA
+113,SSC Napoli,SA
+115,Udinese Calcio,SA
+450,Hellas Verona FC,SA
+457,US Cremonese,SA
+471,US Sassuolo Calcio,SA
+487,AC Pisa 1909,SA
+586,Torino FC,SA
+5890,US Lecce,SA
+7397,Como 1907,SA
+77,Athletic Club,PD
+78,Club Atlético de Madrid,PD
+79,CA Osasuna,PD
+80,RCD Espanyol de Barcelona,PD
+81,FC Barcelona,PD
+82,Getafe CF,PD
+86,Real Madrid CF,PD
+87,Rayo Vallecano de Madrid,PD
+88,Levante UD,PD
+89,RCD Mallorca,PD
+90,Real Betis Balompié,PD
+92,Real Sociedad de Fútbol,PD
+94,Villarreal CF,PD
+95,Valencia CF,PD
+263,Deportivo Alavés,PD
+285,Elche CF,PD
+298,Girona FC,PD
+558,RC Celta de Vigo,PD
+559,Sevilla FC,PD
+1048,Real Oviedo,PD
+511,Toulouse FC,FL1
+512,Stade Brestois 29,FL1
+516,Olympique de Marseille,FL1
+519,AJ Auxerre,FL1
+521,Lille OSC,FL1
+522,OGC Nice,FL1
+523,Olympique Lyonnais,FL1
+524,Paris Saint-Germain FC,FL1
+525,FC Lorient,FL1
+529,Stade Rennais FC 1901,FL1
+532,Angers SCO,FL1
+533,Le Havre AC,FL1
+543,FC Nantes,FL1
+545,FC Metz,FL1
+546,Racing Club de Lens,FL1
+548,AS Monaco FC,FL1
+576,RC Strasbourg Alsace,FL1
+1045,Paris FC,FL1

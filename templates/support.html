@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 bg-gray-900 min-h-screen text-white">
+    <h1 class="text-4xl font-bold mb-8 text-center">Support & Contact</h1>
+
+    <!-- Section Aide -->
+    <div class="mb-12 bg-gray-800 rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-400">Comment pouvons-nous vous aider ?</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- FAQ -->
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Questions fréquentes</h3>
+                <div class="space-y-4">
+                    <div>
+                        <h4 class="font-semibold text-blue-300">Comment fonctionne le système de prédiction ?</h4>
+                        <p class="text-gray-300">Notre système utilise des algorithmes d'apprentissage automatique avancés pour analyser les données historiques et fournir des prédictions précises.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-blue-300">Les prédictions sont-elles fiables ?</h4>
+                        <p class="text-gray-300">Nos prédictions sont basées sur des données statistiques et historiques, mais le football reste un sport imprévisible. Utilisez nos prédictions comme un guide.</p>
+                    </div>
+                    <div>
+                        <h4 class="font-semibold text-blue-300">Comment puis-je signaler un bug ?</h4>
+                        <p class="text-gray-300">Vous pouvez nous contacter par email ou via WhatsApp pour signaler tout problème technique.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Coordonnées -->
+            <div>
+                <h3 class="text-xl font-semibold mb-4">Nous contacter</h3>
+                <div class="space-y-4">
+                    <div class="flex items-center">
+                        <i class="fas fa-envelope text-blue-400 text-xl mr-4"></i>
+                        <div>
+                            <h4 class="font-semibold">Email</h4>
+                            <a href="mailto:support@fip.com" class="text-blue-400 hover:text-blue-300">support@fip.com</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fab fa-whatsapp text-blue-400 text-xl mr-4"></i>
+                        <div>
+                            <h4 class="font-semibold">WhatsApp</h4>
+                            <a href="https://wa.me/22893035706" target="_blank" class="text-blue-400 hover:text-blue-300">+228 93 03 57 06</a>
+                        </div>
+                    </div>
+                    <div class="flex items-center">
+                        <i class="fas fa-clock text-blue-400 text-xl mr-4"></i>
+                        <div>
+                            <h4 class="font-semibold">Horaires de support</h4>
+                            <p class="text-gray-300">Lundi - Vendredi : 9h - 18h</p>
+                            <p class="text-gray-300">Week-end : 10h - 16h</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulaire de contact -->
+    <div class="bg-gray-800 rounded-lg p-6">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-400">Envoyez-nous un message</h2>
+        <form class="space-y-4">
+            <div>
+                <label class="block text-gray-300 mb-2" for="name">Nom</label>
+                <input type="text" id="name" class="w-full bg-gray-700 text-white rounded-md p-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-gray-300 mb-2" for="email">Email</label>
+                <input type="email" id="email" class="w-full bg-gray-700 text-white rounded-md p-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+            </div>
+            <div>
+                <label class="block text-gray-300 mb-2" for="subject">Sujet</label>
+                <select id="subject" class="w-full bg-gray-700 text-white rounded-md p-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
+                    <option value="">Sélectionnez un sujet</option>
+                    <option value="bug">Signalement de bug</option>
+                    <option value="feature">Suggestion de fonctionnalité</option>
+                    <option value="question">Question générale</option>
+                    <option value="other">Autre</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-gray-300 mb-2" for="message">Message</label>
+                <textarea id="message" rows="4" class="w-full bg-gray-700 text-white rounded-md p-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"></textarea>
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-200">
+                Envoyer le message
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %} 

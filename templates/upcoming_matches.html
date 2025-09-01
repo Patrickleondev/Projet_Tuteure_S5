@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8 text-center">Matchs à venir</h1>
+
+    <!-- Sélecteur de compétition -->
+    <div class="mb-8">
+        <select id="competition-selector" class="w-full md:w-64 bg-gray-800 text-white border border-gray-700 rounded-lg px-4 py-2">
+            <option value="all">Toutes les compétitions</option>
+            <option value="CL">UEFA Champions League</option>
+            <option value="PL">Premier League</option>
+            <option value="BL1">Bundesliga</option>
+            <option value="SA">Serie A</option>
+            <option value="PD">La Liga</option>
+            <option value="FL1">Ligue 1</option>
+        </select>
+    </div>
+
+    <!-- Liste des matchs -->
+    <div id="matches-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Les matchs seront ajoutés ici dynamiquement -->
+    </div>
+
+    <!-- Template pour un match -->
+    <template id="match-template">
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 hover:bg-gray-700 transition duration-200">
+            <div class="text-sm text-gray-400 mb-2 competition-name"></div>
+            <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center flex-1">
+                    <img class="home-team-logo w-8 h-8 object-contain" src="" alt="">
+                    <span class="home-team-name ml-2 font-semibold"></span>
+                </div>
+                <div class="text-xl font-bold mx-4">VS</div>
+                <div class="flex items-center flex-1 justify-end">
+                    <span class="away-team-name mr-2 font-semibold"></span>
+                    <img class="away-team-logo w-8 h-8 object-contain" src="" alt="">
+                </div>
+            </div>
+            <div class="text-center text-sm text-gray-400 match-date"></div>
+            <div class="text-center text-sm text-gray-400 match-stage mt-1"></div>
+            <button class="predict-btn w-full mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                Prédire ce match
+            </button>
+        </div>
+    </template>
+</div>
+
+<!-- Script pour charger les matchs -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const competitionSelector = document.getElementById('competition-selector');
+    const matchesList = document.getElementById('matches-list');
+    const matchTemplate = document.getElementById('match-template');
+
+    function formatDate(dateString) {
+        const date = new Date(dateString);
+        return new Intl.DateTimeFormat('fr-FR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+        }).format(date);
+    }
+
+    async function loadMatches(competitionId) {
+        try {
+            const response = await fetch(`/api/upcoming-matches/${competitionId}`);
+            const matches = await response.json();
+            
+            matchesList.innerHTML = '';
+            
+            matches.forEach(match => {
+                const matchElement = document.importNode(matchTemplate.content, true);
+                
+                matchElement.querySelector('.competition-name').textContent = match.competition;
+                matchElement.querySelector('.home-team-logo').src = match.home_team_logo;
+                matchElement.querySelector('.home-team-name').textContent = match.home_team;
+                matchElement.querySelector('.away-team-logo').src = match.away_team_logo;
+                matchElement.querySelector('.away-team-name').textContent = match.away_team;
+                matchElement.querySelector('.match-date').textContent = formatDate(match.date);
+                
+                const stageText = match.group ? `${match.stage} - ${match.group}` : match.stage;
+                matchElement.querySelector('.match-stage').textContent = stageText;
+                
+                const predictBtn = matchElement.querySelector('.predict-btn');
+                predictBtn.addEventListener('click', () => {
+                    window.location.href = `/predictions?home=${encodeURIComponent(match.home_team)}&away=${encodeURIComponent(match.away_team)}`;
+                });
+                
+                matchesList.appendChild(matchElement);
+            });
+        } catch (error) {
+            console.error('Erreur lors du chargement des matchs:', error);
+        }
+    }
+
+    competitionSelector.addEventListener('change', (e) => {
+        loadMatches(e.target.value);
+    });
+
+    // Charger tous les matchs au démarrage
+    loadMatches('all');
+});
+</script>
+{% endblock %} 

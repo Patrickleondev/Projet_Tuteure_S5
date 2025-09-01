@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl font-bold mb-8 text-center">À propos de Football Insight Predictor</h1>
+        
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Notre Mission</h2>
+            <p class="text-gray-300 mb-6">
+                Football Insight Predictor est un outil avancé d'analyse et de prédiction de matchs de football. 
+                Notre objectif est de fournir des prédictions précises basées sur des données historiques et 
+                des statistiques détaillées pour aider les passionnés de football à mieux comprendre les matchs.
+            </p>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Notre Technologie</h2>
+            <p class="text-gray-300 mb-4">
+                Nous utilisons des algorithmes d'apprentissage automatique sophistiqués pour analyser :
+            </p>
+            <ul class="list-disc list-inside text-gray-300 space-y-2 mb-6">
+                <li>Les performances historiques des équipes</li>
+                <li>Les statistiques de jeu détaillées</li>
+                <li>Les confrontations directes</li>
+                <li>La forme récente des équipes</li>
+                <li>Les statistiques de discipline</li>
+                <li>Les données sur les coups de pied arrêtés</li>
+            </ul>
+        </div>
+
+        <div class="bg-gray-800 rounded-lg shadow-lg p-6">
+            <h2 class="text-2xl font-semibold mb-4">Notre Équipe</h2>
+            <p class="text-gray-300 mb-6">
+                Notre équipe est composée de passionnés de football et d'Etudiants en  IA & Big Data, 
+                travaillant ensemble pour fournir les meilleures prédictions possibles.
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto bg-gray-700 rounded-full mb-4"></div>
+                    <h3 class="text-xl font-medium mb-2">Patrick-léon GANDONOU & Florentin AZONYIBO</h3>
+                    <p class="text-gray-400">Data Scientist</p>
+                </div>
+                <div class="text-center">
+                    <div class="w-32 h-32 mx-auto bg-gray-700 rounded-full mb-4"></div>
+                    <h3 class="text-xl font-medium mb-2">Anne  ATITSO</h3>
+                    <p class="text-gray-400">Football Analyst</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

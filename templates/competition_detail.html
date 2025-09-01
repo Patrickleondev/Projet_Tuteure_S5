@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+
+{% block title %}Détails de la compétition{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 bg-gray-900 min-h-screen text-white">
+    <div class="flex items-center mb-8">
+        <img src="{{ url_for('static', filename='img/competitions/' + competition.image) }}" 
+             alt="{{ competition.name }}" 
+             class="w-24 h-24 object-contain mr-6">
+        <div>
+            <h1 class="text-4xl font-bold text-white">{{ competition.name }}</h1>
+            <p class="text-gray-400">{{ competition.country if competition.country else competition.type }}</p>
+        </div>
+    </div>
+
+    <!-- Matchs à venir -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-400">Matchs à venir</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for match in upcoming_matches %}
+            <div class="bg-gray-800 rounded-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <div class="text-center flex-1">
+                        <img src="{{ url_for('static', filename=match.home_team.logo) }}" 
+                             alt="{{ match.home_team.name }}" 
+                             class="w-12 h-12 mx-auto object-contain">
+                        <p class="mt-2 text-white">{{ match.home_team.name }}</p>
+                    </div>
+                    <div class="text-2xl font-bold mx-4">VS</div>
+                    <div class="text-center flex-1">
+                        <img src="{{ url_for('static', filename=match.away_team.logo) }}" 
+                             alt="{{ match.away_team.name }}" 
+                             class="w-12 h-12 mx-auto object-contain">
+                        <p class="mt-2 text-white">{{ match.away_team.name }}</p>
+                    </div>
+                </div>
+                <div class="text-center text-gray-400">
+                    <p>{{ match.date }}</p>
+                    <p>{{ match.time }}</p>
+                    <p>{{ match.venue }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Équipes -->
+    <div class="mb-12">
+        <h2 class="text-2xl font-semibold mb-6 text-blue-400">Équipes</h2>
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+            {% for team in teams %}
+            <div class="bg-gray-800 rounded-lg p-4 text-center hover:bg-gray-700 transition duration-300">
+                <img src="{{ url_for('static', filename=team.logo) }}" 
+                     alt="{{ team.name }}" 
+                     class="w-16 h-16 mx-auto object-contain mb-4">
+                <h3 class="text-lg font-semibold text-white">{{ team.name }}</h3>
+                {% if team.country %}
+                <p class="text-gray-400">{{ team.country }}</p>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Statistiques -->
+    <div>
+        <h2 class="text-2xl font-semibold mb-6 text-blue-400">Statistiques de la compétition</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Graphiques des statistiques -->
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-white">Buts par match</h3>
+                <canvas id="goalsChart"></canvas>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-white">Cartons</h3>
+                <canvas id="cardsChart"></canvas>
+            </div>
+            <div class="bg-gray-800 rounded-lg p-6">
+                <h3 class="text-xl font-semibold mb-4 text-white">Autres statistiques</h3>
+                <canvas id="otherStatsChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Scripts pour les graphiques -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+// Initialisation des graphiques
+document.addEventListener('DOMContentLoaded', function() {
+    // Graphique des buts
+    const goalsCtx = document.getElementById('goalsChart').getContext('2d');
+    new Chart(goalsCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Buts marqués', 'Buts encaissés', 'Moyenne par match'],
+            datasets: [{
+                label: 'Buts',
+                data: [2.5, 1.8, 2.1],
+                backgroundColor: ['#3B82F6', '#EF4444', '#10B981']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            }
+        }
+    });
+
+    // Graphique des cartons
+    const cardsCtx = document.getElementById('cardsChart').getContext('2d');
+    new Chart(cardsCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Cartons jaunes', 'Cartons rouges'],
+            datasets: [{
+                data: [85, 15],
+                backgroundColor: ['#FBBF24', '#EF4444']
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+
+    // Graphique des autres statistiques
+    const otherStatsCtx = document.getElementById('otherStatsChart').getContext('2d');
+    new Chart(otherStatsCtx, {
+        type: 'radar',
+        data: {
+            labels: ['Corners', 'Hors-jeu', 'Fautes', 'Possession', 'Tirs'],
+            datasets: [{
+                label: 'Moyenne par match',
+                data: [5.2, 2.8, 12.5, 50, 14.3],
+                backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                borderColor: '#3B82F6',
+                pointBackgroundColor: '#3B82F6'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                r: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.1)'
+                    },
+                    ticks: {
+                        color: '#9CA3AF'
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+{% endblock %} 

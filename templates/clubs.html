@@ -1,0 +1,149 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-4xl font-bold mb-8 text-center">Clubs</h1>
+    
+    <!-- Filtres -->
+    <div class="mb-8">
+        <div class="flex flex-wrap gap-4 justify-center">
+            <button class="competition-filter active bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-competition="all">
+                Tous les clubs
+            </button>
+            <button class="competition-filter bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-competition="cl">
+                Champions League
+            </button>
+            <button class="competition-filter bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-competition="en.1">
+                Premier League
+            </button>
+            <button class="competition-filter bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-competition="es.1">
+                La Liga
+            </button>
+            <button class="competition-filter bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-competition="de.1">
+                Bundesliga
+            </button>
+            <button class="competition-filter bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-competition="it.1">
+                Serie A
+            </button>
+            <button class="competition-filter bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded" data-competition="fr.1">
+                Ligue 1
+            </button>
+        </div>
+    </div>
+
+    <!-- Liste des clubs -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="clubs-grid">
+        <!-- Les clubs seront ajoutés ici dynamiquement -->
+    </div>
+</div>
+
+<!-- Template pour une carte de club -->
+<template id="club-card-template">
+    <div class="club-card bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+        <div class="p-4">
+            <div class="flex items-center space-x-4">
+                <img class="w-16 h-16 object-contain" src="" alt="Logo du club">
+                <div>
+                    <h3 class="text-xl font-bold text-white"></h3>
+                    <p class="text-gray-400 competition-name"></p>
+                </div>
+            </div>
+            <div class="mt-4 space-y-2">
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Classement</span>
+                    <span class="text-white ranking"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Points</span>
+                    <span class="text-white points"></span>
+                </div>
+                <div class="flex justify-between text-sm">
+                    <span class="text-gray-400">Forme</span>
+                    <div class="form-indicators flex space-x-1"></div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-200">
+                    Voir les détails
+                </button>
+            </div>
+        </div>
+    </div>
+</template>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    // Gestion des filtres
+    const filters = document.querySelectorAll('.competition-filter');
+    filters.forEach(filter => {
+        filter.addEventListener('click', () => {
+            // Retirer la classe active de tous les filtres
+            filters.forEach(f => f.classList.remove('active', 'bg-blue-600'));
+            // Ajouter la classe active au filtre cliqué
+            filter.classList.add('active', 'bg-blue-600');
+            // Charger les clubs de la compétition sélectionnée
+            loadClubs(filter.dataset.competition);
+        });
+    });
+
+    // Charger tous les clubs au démarrage
+    loadClubs('all');
+});
+
+async function loadClubs(competitionId) {
+    try {
+        const response = await fetch(`/api/teams/${competitionId}`);
+        const clubs = await response.json();
+        displayClubs(clubs);
+    } catch (error) {
+        console.error('Erreur lors du chargement des clubs:', error);
+    }
+}
+
+function displayClubs(clubs) {
+    const grid = document.getElementById('clubs-grid');
+    const template = document.getElementById('club-card-template');
+    
+    // Vider la grille
+    grid.innerHTML = '';
+    
+    clubs.forEach(club => {
+        const card = template.content.cloneNode(true);
+        
+        // Mettre à jour les informations du club
+        card.querySelector('img').src = club.logo;
+        card.querySelector('img').alt = `Logo ${club.name}`;
+        card.querySelector('h3').textContent = club.name;
+        card.querySelector('.competition-name').textContent = club.competition;
+        card.querySelector('.ranking').textContent = `${club.ranking}${getOrdinalSuffix(club.ranking)}`;
+        card.querySelector('.points').textContent = `${club.points} pts`;
+        
+        // Ajouter les indicateurs de forme
+        const formIndicators = card.querySelector('.form-indicators');
+        club.form.split('').forEach(result => {
+            const indicator = document.createElement('span');
+            indicator.className = `w-4 h-4 rounded-full ${getFormColor(result)}`;
+            formIndicators.appendChild(indicator);
+        });
+        
+        grid.appendChild(card);
+    });
+}
+
+function getFormColor(result) {
+    switch(result.toUpperCase()) {
+        case 'W': return 'bg-green-500';
+        case 'D': return 'bg-yellow-500';
+        case 'L': return 'bg-red-500';
+        default: return 'bg-gray-500';
+    }
+}
+
+function getOrdinalSuffix(number) {
+    const j = number % 10;
+    const k = number % 100;
+    if (j == 1 && k != 11) return "er";
+    return "e";
+}
+</script>
+{% endblock %} 

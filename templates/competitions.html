@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 bg-gray-900 min-h-screen text-white">
+    <h1 class="text-4xl font-bold mb-8 text-center">Compétitions</h1>
+    
+    <!-- Compétitions de clubs -->
+    <div class="mb-12">
+        <div class="flex items-center mb-6">
+            <h2 class="text-2xl font-semibold text-blue-400">Compétitions de Clubs</h2>
+            <div class="flex-grow ml-4 border-t border-gray-700"></div>
+            </div>
+
+        <!-- Compétitions européennes -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4 text-gray-300">Compétitions Européennes</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for competition in competitions.clubs %}
+                {% if competition.country == "Europe" %}
+                <a href="{{ url_for('competition_detail', competition_id=competition.id) }}" 
+                   class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{ url_for('static', filename='img/competitions/' + competition.image) }}" 
+                             alt="{{ competition.name }}" 
+                             class="w-16 h-16 object-contain">
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">{{ competition.name }}</h3>
+                            <p class="text-gray-400">{{ competition.country }}</p>
+                </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+
+        <!-- Championnats nationaux -->
+        <div class="mb-8">
+            <h3 class="text-xl font-semibold mb-4 text-gray-300">Championnats Nationaux</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for competition in competitions.clubs %}
+                {% if competition.country not in ["Europe", "International"] %}
+                <a href="{{ url_for('competition_detail', competition_id=competition.id) }}" 
+                   class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{ url_for('static', filename='img/competitions/' + competition.image) }}" 
+                             alt="{{ competition.name }}" 
+                             class="w-16 h-16 object-contain">
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">{{ competition.name }}</h3>
+                            <p class="text-gray-400">{{ competition.country }}</p>
+                </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+                </div>
+            </div>
+
+        <!-- Compétitions internationales de clubs -->
+        <div>
+            <h3 class="text-xl font-semibold mb-4 text-gray-300">Compétitions Internationales</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {% for competition in competitions.clubs %}
+                {% if competition.country == "International" %}
+                <a href="{{ url_for('competition_detail', competition_id=competition.id) }}" 
+                   class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center space-x-4">
+                        <img src="{{ url_for('static', filename='img/competitions/' + competition.image) }}" 
+                             alt="{{ competition.name }}" 
+                             class="w-16 h-16 object-contain">
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">{{ competition.name }}</h3>
+                            <p class="text-gray-400">{{ competition.country }}</p>
+                </div>
+                    </div>
+                </a>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Compétitions nationales -->
+    <div>
+        <div class="flex items-center mb-6">
+            <h2 class="text-2xl font-semibold text-blue-400">Compétitions Internationales</h2>
+            <div class="flex-grow ml-4 border-t border-gray-700"></div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for competition in competitions.nations %}
+            <a href="{{ url_for('competition_detail', competition_id=competition.id) }}" 
+               class="bg-gray-800 rounded-lg p-6 hover:bg-gray-700 transition duration-300 transform hover:-translate-y-1">
+                <div class="flex items-center space-x-4">
+                    <img src="{{ url_for('static', filename='img/competitions/' + competition.image) }}" 
+                         alt="{{ competition.name }}" 
+                         class="w-16 h-16 object-contain">
+                    <div>
+                        <h3 class="text-xl font-semibold text-white">{{ competition.name }}</h3>
+                        <p class="text-gray-400">{{ competition.type }}</p>
+                    </div>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %} 

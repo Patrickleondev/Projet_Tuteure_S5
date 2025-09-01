@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8 bg-gray-900 min-h-screen text-white">
+    <h1 class="text-4xl font-bold mb-8 text-center">Assistant Football</h1>
+        
+    <div class="max-w-3xl mx-auto">
+            <!-- Zone de chat -->
+        <div id="chat-container" class="bg-gray-800 rounded-lg p-6 mb-4 h-[500px] overflow-y-auto">
+            <div id="chat-messages" class="space-y-4">
+                    <!-- Message de bienvenue -->
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Assistant" class="w-8 h-8 rounded-full">
+                            </div>
+                    <div class="ml-3 bg-gray-700 rounded-lg p-3">
+                        <p class="text-white">Bonjour ! Je suis votre assistant football. Je peux vous aider avec les prédictions de matchs, les statistiques des équipes, et plus encore. Comment puis-je vous aider aujourd'hui ?</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Zone de saisie -->
+        <div class="flex space-x-4">
+            <input type="text" id="user-input" 
+                   class="flex-1 bg-gray-700 text-white rounded-lg px-4 py-2 border border-gray-600 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                   placeholder="Posez votre question...">
+            <button id="send-btn" 
+                    class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg transition duration-200">
+                Envoyer
+                </button>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const chatMessages = document.getElementById('chat-messages');
+    const userInput = document.getElementById('user-input');
+    const sendBtn = document.getElementById('send-btn');
+    const chatContainer = document.getElementById('chat-container');
+
+    function addMessage(message, isUser = false) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'flex items-start ' + (isUser ? 'justify-end' : '');
+
+        const content = `
+            <div class="flex-shrink-0 ${isUser ? 'order-2 ml-3' : 'mr-3'}">
+                <div class="${isUser ? 'bg-blue-500' : ''} w-8 h-8 rounded-full flex items-center justify-center">
+                    ${isUser ? 
+                        '<span class="text-white font-bold">U</span>' : 
+                        '<img src="/static/img/logo.png" alt="Assistant" class="w-8 h-8 rounded-full">'
+                    }
+                </div>
+            </div>
+            <div class="${isUser ? 'order-1' : ''} bg-${isUser ? 'blue-600' : 'gray-700'} rounded-lg p-3">
+                <p class="text-white">${message}</p>
+            </div>
+        `;
+
+        messageDiv.innerHTML = content;
+        chatMessages.appendChild(messageDiv);
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+    }
+
+    function sendMessage() {
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        // Ajouter le message de l'utilisateur
+        addMessage(message, true);
+        userInput.value = '';
+
+        // Envoyer la requête au serveur
+        fetch('/api/chat', {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: message })
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.error) {
+                addMessage("Désolé, une erreur s'est produite. Veuillez réessayer.");
+            } else {
+            addMessage(data.response);
+            }
+        })
+        .catch(error => {
+            console.error('Erreur:', error);
+            addMessage("Désolé, une erreur s'est produite. Veuillez réessayer.");
+        });
+    }
+
+    // Événements
+    sendBtn.addEventListener('click', sendMessage);
+    userInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            sendMessage();
+        }
+    });
+});
+</script>
+{% endblock %} 
